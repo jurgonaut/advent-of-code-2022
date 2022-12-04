@@ -2,9 +2,11 @@ import argparse
 
 alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
+
 def split_rucksack(rucksack):
     rucksack_size = int(len(rucksack) / 2)
     return rucksack[:rucksack_size], rucksack[rucksack_size:]
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -23,7 +25,7 @@ if __name__ == "__main__":
                 common_item = set(compartments_1) & set(compartments_2)
                 total_priority += alphabet.find(common_item.pop()) + 1
         print(total_priority)
-    
+
     if args.second:
         batch = []
         total_priority = 0
