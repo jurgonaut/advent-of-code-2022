@@ -35,11 +35,7 @@ function are_section_fully_overlapped_v2($sections) {
     $diff_start = $sections[0]->start - $sections[1]->start;
     $diff_end = $sections[0]->end - $sections[1]->end;
 
-    if ($diff_start == 0 || $diff_end == 0) {
-        return True;
-    }
-        
-    if ($diff_start < 0 && $diff_end > 0 || $diff_start > 0 && $diff_end < 0) {
+    if ($diff_start <= 0 && $diff_end >= 0 || $diff_start >= 0 && $diff_end <= 0) {
         return True;
     }
 
