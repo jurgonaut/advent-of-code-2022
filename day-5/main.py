@@ -2,26 +2,17 @@ import argparse
 import re
 import copy
 
-def initialize_stacks(initial_state):
-    stacks = []
+def initialize_stacks_2(line, stacks):
+    crates = re.finditer(r"\[([A-Z])\]", line)
 
-    while True:
-        line = initial_state.pop()
-
-        crates = re.finditer(r"\[([A-Z])\]", line)
-
-        for c in crates:
-            column = int(c.span()[0] / 4) # every crate takes up 4 chars eg: "[A] "
-            value = c.group(1) # get the group 1 inside the "()"
-            
-            if column >= len(stacks):
-                stacks.append([])
-            stacks[column].append(value)
-
-        if not initial_state:
-            break
-
-    return stacks
+    # the crates object has roughly this structure: {group: Z, span: [0,3]}, {group: M, span: [4,7]}, ....
+    for c in crates:
+        column = int(c.span()[0] / 4) # every crate takes up 4 chars eg: "[A] "
+        value = c.group(1) # get the group 1 inside the "()"
+        
+        if column >= len(stacks):
+            stacks.append([])
+        stacks[column].append(value)
 
 def get_move_parameters(line):
     number_of_crates = int(re.search(r"move (\d{1,})", line).group(1))
@@ -30,34 +21,20 @@ def get_move_parameters(line):
 
     return number_of_crates, from_stack, to_stack
 
-def move(stacks, moves):
-    while True:
-        move = moves.pop(0)
-
-        number_of_crates, from_stack, to_stack = get_move_parameters(move)
+def move(stacks, move):
+    number_of_crates, from_stack, to_stack = get_move_parameters(move)
    
-        for i in range(number_of_crates):
-            crate = stacks[from_stack].pop()
-            stacks[to_stack].append(crate)
+    crates = stacks[from_stack][-number_of_crates:]
+    del stacks[from_stack][-number_of_crates:]
+    crates.reverse()
+    stacks[to_stack].extend(crates)
 
-        if not moves:
-            break
-
-def move_2(stacks, moves):
-    while True:
-        move = moves.pop(0)
-
-        number_of_crates, from_stack, to_stack = get_move_parameters(move)
+def move_2(stacks, move):
+    number_of_crates, from_stack, to_stack = get_move_parameters(move)
    
-        crates = []
-        for i in range(number_of_crates):
-            crates.append(stacks[from_stack].pop())
-
-        crates.reverse()
-        stacks[to_stack].extend(crates)
-
-        if not moves:
-            break
+    crates = stacks[from_stack][-number_of_crates:]
+    del stacks[from_stack][-number_of_crates:]
+    stacks[to_stack].extend(crates)
 
 def get_result(stacks):
     solution = ""
@@ -70,10 +47,6 @@ def get_result(stacks):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", required=True, help="path to input file")
-    parser.add_argument(
-        "--first", help="first half solution", action="store_true")
-    parser.add_argument(
-        "--second", help="second half solution", action="store_true")
     args = parser.parse_args()
 
     file = open(args.input, mode='r')
@@ -84,17 +57,16 @@ if __name__ == "__main__":
     initial_state = input_separated[0].split("\n")
     moves = input_separated[1].split("\n")
 
-    columns = initial_state.pop() # Don't really need the column numbers, just remove them.
-    stacks = initialize_stacks(initial_state)
-    
-    if args.first:
-        m = copy.deepcopy(moves)
-        s = copy.deepcopy(stacks)
-        move(s, m)
-        print(get_result(s))
+    stacks_1 = []
+    for s in initial_state[::-1]: # Loop from end, so in our case from the column numbers to the top of the crates 
+        initialize_stacks_2(s, stacks_1)
 
-    if args.second:
-        m = copy.deepcopy(moves)
-        s = copy.deepcopy(stacks)
-        move_2(s, m)
-        print(get_result(s))
+    # Need to create a deep copy because otherwise the moves override themselves.
+    stacks_2 = copy.deepcopy(stacks_1)
+    
+    for m in moves:
+        move(stacks_1, m)
+        move_2(stacks_2, m)
+
+    print(get_result(stacks_1))
+    print(get_result(stacks_2))
