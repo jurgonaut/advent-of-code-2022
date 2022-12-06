@@ -1,25 +1,15 @@
 import argparse
 
 def find_start_of_marker(input, window_size):
-        """
-            Parse the input in chunks of window_size, then check if the char is 
-            in the unique_chars set. Then if the unique_chars length is equal to the 
-            window_size it means we have only unique chars and we found the start marker.
-        """
-
         i = 0
 
         while (i + window_size) < len(input) +1:
-            unique_chars = set()
-            
             chunk = input[i:i+window_size]
-            
-            for char in chunk:
-                if char in unique_chars:
-                    break
-                unique_chars.add(char)
 
-            if len(unique_chars) == window_size:
+            # Check if the set from chunk contains the same number of chars 
+            # as the window size, this means that there are only unique chars
+            # in the chunk and we found the start marker.
+            if (len(set(chunk))) == window_size:
                 return i+window_size
 
             i += 1
