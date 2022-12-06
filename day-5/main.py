@@ -63,8 +63,6 @@ def get_result(stacks):
     solution = ""
 
     for s in stacks:
-        if not s:
-            continue
         solution += s[-1]
 
     return solution
@@ -86,7 +84,7 @@ if __name__ == "__main__":
     initial_state = input_separated[0].split("\n")
     moves = input_separated[1].split("\n")
 
-    columns = initial_state.pop()
+    columns = initial_state.pop() # Don't really need the column numbers, just remove them.
     stacks = initialize_stacks(initial_state)
     
     if args.first:
