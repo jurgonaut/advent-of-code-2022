@@ -12,7 +12,7 @@ def initialize_stacks(initial_state):
 
         for c in crates:
             column = int(c.span()[0] / 4) # every crate takes up 4 chars eg: "[A] "
-            value = c.group(1)
+            value = c.group(1) # get the group 1 inside the "()"
             
             if column >= len(stacks):
                 stacks.append([])
@@ -25,8 +25,8 @@ def initialize_stacks(initial_state):
 
 def get_move_parameters(line):
     number_of_crates = int(re.search(r"move (\d{1,})", line).group(1))
-    from_stack = int(re.search(r"from (\d{1,})", line).group(1)) -1
-    to_stack = int(re.search(r"to (\d{1,})", line).group(1)) -1
+    from_stack = int(re.search(r"from (\d{1,})", line).group(1)) -1 # offset by 1 to start from 0
+    to_stack = int(re.search(r"to (\d{1,})", line).group(1)) -1 # offset by 1 to start from 0
 
     return number_of_crates, from_stack, to_stack
 
