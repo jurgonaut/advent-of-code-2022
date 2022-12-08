@@ -22,13 +22,17 @@ if __name__ == "__main__":
         elif line.startswith("$ cd"):
             # If root dir "/" replace it with "" els use the dir name
             args[2] = "" if args[2] == "/" else args[2]
+            
             current_dir_path.append(args[2])
             dir_name = "/".join(current_dir_path)
             directories[dir_name] = 0
 
         elif line[0].isdigit():
+            # Make deep copy otherwise the pop() will modify the original list
             tmp_dir_path = copy.deepcopy(current_dir_path)
 
+            # remove the directories from end until we reach the root 
+            # and keep adding the size value to the current dir.
             while tmp_dir_path:
                 dir_name = "/".join(tmp_dir_path)
                 directories[dir_name] += int(args[0])
