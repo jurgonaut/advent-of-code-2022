@@ -14,41 +14,6 @@ def input_to_coordinates(input):
     return coordinates
 
 
-def search_all_directions(start_y, end_y, start_x, end_x, step, visible):
-    highest = -1
-
-    if start_y == end_y:
-        horizontal = True
-        start = start_x
-        end = end_x
-    else:
-        horizontal = False
-        start = start_y
-        end = end_y
-
-    for i in range(start, end, step):
-        if horizontal:
-            if coordinates[start_y][i] > highest:
-                key = f"{start_y}|{i}"
-                if not visible.get(key):
-                    visible[key] = coordinates[start_y][i]
-
-                highest = coordinates[start_y][i]
-
-                if highest == 9:
-                    break
-        else:
-            if coordinates[i][start_x] > highest:
-                key = f"{i}|{start_x}"
-                if not visible.get(key):
-                    visible[key] = coordinates[i][start_x]
-
-                highest = coordinates[i][start_x]
-
-                if highest == 9:
-                    break
-
-
 def search_horizontal(start, end, step, row, visible):
     highest = -1
     for i in range(start, end, step):
