@@ -65,11 +65,8 @@ if __name__ == "__main__":
     # initialize all the tail nodes
     tail_start = TailNode(0, 0, 0)
     
-    current = None
+    current = tail_start
     for i in range(0, 9):
-        if not current:
-            current = tail_start
-
         current.next = TailNode(0, 0, i+1)
         current = current.next
 
