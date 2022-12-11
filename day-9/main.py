@@ -95,8 +95,6 @@ if __name__ == "__main__":
                 if are_nodes_touching(next_node, current):
                     break
                 
-                tmp = current
-
                 diff_y, diff_x = get_nodes_diff(next_node, current)
 
                 current.y = current.y + 1 * diff_y
@@ -112,7 +110,7 @@ if __name__ == "__main__":
                     if not unique_positions_part_2.get(key):
                         unique_positions_part_2[key] = 0
 
-                next_node = tmp
+                next_node = current
                 current = current.next
 
     print(f"Part 1: {len(unique_positions_part_1)}, part 2: {len(unique_positions_part_2)}")
