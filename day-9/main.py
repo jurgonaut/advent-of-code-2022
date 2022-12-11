@@ -28,6 +28,15 @@ def get_nodes_diff(node_1, node_2):
     # get the direction in which node 2 need to move to arrive at the 
     # correct position. Before returning we need to normalize the result, 
     # we don't want values larger that 1
+    # 
+    # Take the example:
+    # ....
+    # ...H
+    # ..XO
+    # 321.
+    # if we want to figure out where should 1 go (O = correct, X = wrong)
+    # the first part results in diff_y = 2, diff_x = 1
+    # we want to return diff_y = 1, diff_x = 1
 
     diff_y = node_1.y - node_2.y
     diff_x = node_1.x - node_2.x
